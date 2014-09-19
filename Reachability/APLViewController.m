@@ -46,7 +46,7 @@
  */
 
 #import "APLViewController.h"
-#import "Reachability.h"
+#import "RLReachability.h"
 
 
 @interface APLViewController ()
@@ -57,18 +57,28 @@
 @property (nonatomic, weak) IBOutlet UIImageView *remoteHostImageView;
 @property (nonatomic, weak) IBOutlet UITextField *remoteHostStatusField;
 
-@property (nonatomic, weak) IBOutlet UIImageView *internetConnectionImageView;
-@property (nonatomic, weak) IBOutlet UITextField *internetConnectionStatusField;
 
-@property (nonatomic, weak) IBOutlet UIImageView *localWiFiConnectionImageView;
-@property (nonatomic, weak) IBOutlet UITextField *localWiFiConnectionStatusField;
-
-@property (nonatomic) Reachability *hostReachability;
-@property (nonatomic) Reachability *internetReachability;
-@property (nonatomic) Reachability *wifiReachability;
+@property (nonatomic) RLReachability *hostReachability;
 
 @end
 
+
+BOOL (^verifyBlock)(NSData* data) = ^BOOL(NSData* data){
+    NSError* error;
+    NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:(NSJSONReadingMutableContainers) error:&error];
+    if(error)
+        return NO;
+    else{
+        NSLog(@"%@", [dict description]);
+        NSString* status = [dict objectForKey:@"status"];
+        if([status isEqualToString:@"GOOD"]){
+            return YES;
+        }else{
+            return NO;
+        }
+    }
+    
+};
 
 
 
@@ -81,25 +91,13 @@
     /*
      Observe the kNetworkReachabilityChangedNotification. When that notification is posted, the method reachabilityChanged will be called.
      */
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChanged:) name:kReachabilityChangedNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChanged:) name:kInternetStatusChangedNotification object:nil];
 
-    //Change the host name here to change the server you want to monitor.
-    NSString *remoteHostName = @"www.apple.com";
-    NSString *remoteHostLabelFormatString = NSLocalizedString(@"Remote Host: %@", @"Remote host label format string");
-    self.remoteHostLabel.text = [NSString stringWithFormat:remoteHostLabelFormatString, remoteHostName];
-    
-	self.hostReachability = [Reachability reachabilityWithHostName:remoteHostName];
-	[self.hostReachability startNotifier];
-	[self updateInterfaceWithReachability:self.hostReachability];
-
-    self.internetReachability = [Reachability reachabilityForInternetConnection];
-	[self.internetReachability startNotifier];
-	[self updateInterfaceWithReachability:self.internetReachability];
-
-    self.wifiReachability = [Reachability reachabilityForLocalWiFi];
-	[self.wifiReachability startNotifier];
-	[self updateInterfaceWithReachability:self.wifiReachability];
-    
+    NSString *remoteURL = @"https://b4.autodesk.com/api/system/v1/health.json?detailed=0";
+    NSString *remoteURLFormatString = NSLocalizedString(@"Remote URL: %@", @"Remote host label format string");
+    self.remoteHostLabel.text = [NSString stringWithFormat:remoteURLFormatString, remoteURL];
+	self.hostReachability = [[RLReachability alloc] initWithGetURL:remoteURL VerificationHandler:verifyBlock];
+    [self updateInterfaceWithReachability];
 }
 
 
@@ -108,88 +106,54 @@
  */
 - (void) reachabilityChanged:(NSNotification *)note
 {
-	Reachability* curReach = [note object];
-	NSParameterAssert([curReach isKindOfClass:[Reachability class]]);
-	[self updateInterfaceWithReachability:curReach];
+	RLReachability* curReach = [note object];
+	NSParameterAssert([curReach isKindOfClass:[RLReachability class]] && _hostReachability == curReach);
+	[self updateInterfaceWithReachability];
 }
 
 
-- (void)updateInterfaceWithReachability:(Reachability *)reachability
+- (void)updateInterfaceWithReachability
 {
-    if (reachability == self.hostReachability)
-	{
-		[self configureTextField:self.remoteHostStatusField imageView:self.remoteHostImageView reachability:reachability];
-        NetworkStatus netStatus = [reachability currentReachabilityStatus];
-        BOOL connectionRequired = [reachability connectionRequired];
-
-        self.summaryLabel.hidden = (netStatus != ReachableViaWWAN);
-        NSString* baseLabelText = @"";
-        
-        if (connectionRequired)
-        {
-            baseLabelText = NSLocalizedString(@"Cellular data network is available.\nInternet traffic will be routed through it after a connection is established.", @"Reachability text if a connection is required");
-        }
-        else
-        {
-            baseLabelText = NSLocalizedString(@"Cellular data network is active.\nInternet traffic will be routed through it.", @"Reachability text if a connection is not required");
-        }
-        self.summaryLabel.text = baseLabelText;
-    }
-    
-	if (reachability == self.internetReachability)
-	{
-		[self configureTextField:self.internetConnectionStatusField imageView:self.internetConnectionImageView reachability:reachability];
-	}
-
-	if (reachability == self.wifiReachability)
-	{
-		[self configureTextField:self.localWiFiConnectionStatusField imageView:self.localWiFiConnectionImageView reachability:reachability];
-	}
-}
-
-
-- (void)configureTextField:(UITextField *)textField imageView:(UIImageView *)imageView reachability:(Reachability *)reachability
-{
-    NetworkStatus netStatus = [reachability currentReachabilityStatus];
-    BOOL connectionRequired = [reachability connectionRequired];
-    NSString* statusString = @"";
-    
-    switch (netStatus)
-    {
-        case NotReachable:        {
+    NSString* statusString;
+    RLInternetReachabilityInfo* info = [_hostReachability currentInternetStatus];
+    switch (info.internetStatus) {
+        case RLInternetNotReachable:
             statusString = NSLocalizedString(@"Access Not Available", @"Text field text for access is not available");
-            imageView.image = [UIImage imageNamed:@"stop-32.png"] ;
-            /*
-             Minor interface detail- connectionRequired may return YES even when the host is unreachable. We cover that up here...
-             */
-            connectionRequired = NO;
+            self.remoteHostImageView.image = [UIImage imageNamed:@"stop-32.png"] ;
             break;
-        }
-
-        case ReachableViaWWAN:        {
-            statusString = NSLocalizedString(@"Reachable WWAN", @"");
-            imageView.image = [UIImage imageNamed:@"WWAN5.png"];
+        case RLInternetReachabilityPending:
+            statusString = NSLocalizedString(@"Checking Internet status", @"Text field text for checking status");
+            self.remoteHostImageView.image = [UIImage imageNamed:@"stop-32.png"] ;
             break;
+            
+        case RLInternetReachable:
+        {
+            switch (info.interfaceType) {
+                case RLTypeWIFI:
+                    statusString = NSLocalizedString(@"Reachable WWAN", @"");
+                    self.remoteHostImageView.image = [UIImage imageNamed:@"WWAN5.png"];
+                    break;
+                case RLTypeWWAN:
+                    statusString= NSLocalizedString(@"Reachable WiFi", @"");
+                    self.remoteHostImageView.image = [UIImage imageNamed:@"Airport.png"];
+                    break;
+                default:
+                    break;
+            }
         }
-        case ReachableViaWiFi:        {
-            statusString= NSLocalizedString(@"Reachable WiFi", @"");
-            imageView.image = [UIImage imageNamed:@"Airport.png"];
+            
             break;
-        }
+            
+        default:
+            break;
     }
+    _remoteHostStatusField.text = statusString;
     
-    if (connectionRequired)
-    {
-        NSString *connectionRequiredFormatString = NSLocalizedString(@"%@, Connection Required", @"Concatenation of status string with connection requirement");
-        statusString= [NSString stringWithFormat:connectionRequiredFormatString, statusString];
-    }
-    textField.text= statusString;
 }
-
 
 - (void)dealloc
 {
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:kReachabilityChangedNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:kInternetStatusChangedNotification object:nil];
 }
 
 

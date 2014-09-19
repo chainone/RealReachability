@@ -18,6 +18,7 @@
 		284A9D5E17BAD07600206D4F /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 284A9D5D17BAD07600206D4F /* Reachability.m */; };
 		284A9D6117BAD0EC00206D4F /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 284A9D5F17BAD0EC00206D4F /* MainStoryboard.storyboard */; };
 		289CAD4717BAD3F200F2018C /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 289CAD4617BAD3F200F2018C /* Default-568h@2x.png */; };
+		496CC06119CABD96003BD166 /* RLReachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 496CC06019CABD96003BD166 /* RLReachability.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -39,6 +40,8 @@
 		284A9D6017BAD0EC00206D4F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainStoryboard.storyboard; sourceTree = "<group>"; };
 		289CAD4317BAD28D00F2018C /* ReadMe.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = ReadMe.txt; sourceTree = "<group>"; };
 		289CAD4617BAD3F200F2018C /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		496CC05F19CABD96003BD166 /* RLReachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RLReachability.h; sourceTree = "<group>"; };
+		496CC06019CABD96003BD166 /* RLReachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RLReachability.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -88,6 +91,8 @@
 			children = (
 				284A9D5C17BAD07600206D4F /* Reachability.h */,
 				284A9D5D17BAD07600206D4F /* Reachability.m */,
+				496CC05F19CABD96003BD166 /* RLReachability.h */,
+				496CC06019CABD96003BD166 /* RLReachability.m */,
 				284A9D3C17BACFCC00206D4F /* APLViewController.h */,
 				284A9D3D17BACFCC00206D4F /* APLViewController.m */,
 				284A9D3317BACFCC00206D4F /* APLAppDelegate.h */,
@@ -180,6 +185,7 @@
 			files = (
 				284A9D3517BACFCC00206D4F /* APLAppDelegate.m in Sources */,
 				284A9D3E17BACFCC00206D4F /* APLViewController.m in Sources */,
+				496CC06119CABD96003BD166 /* RLReachability.m in Sources */,
 				284A9D5E17BAD07600206D4F /* Reachability.m in Sources */,
 				284A9D3117BACFCC00206D4F /* main.m in Sources */,
 			);
