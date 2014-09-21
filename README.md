@@ -9,8 +9,10 @@ RealReachability takes an URL for testing the actual reachability of the given h
 Real reachability status change notifcation would be delivered to main thread.
 
 Usage:
+
+```Objective-C
 [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChanged:) name:kInternetStatusChangedNotification object:nil];
 NSString *remoteURL = @"https://b4.autodesk.com/api/system/v1/health.json?detailed=0";
 self.hostReachability = [[RLReachability alloc] initWithGetURL:remoteURL VerificationHandler:verifyBlock];
-
+```
 
