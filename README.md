@@ -11,6 +11,22 @@ Real reachability status change notifcation would be delivered to main thread.
 Usage:
 
 ```Objective-C
+BOOL (^verifyBlock)(NSData* data) = ^BOOL(NSData* data){
+    NSError* error;
+    NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:(NSJSONReadingMutableContainers) error:&error];
+    if(error)
+        return NO;
+    else{
+        NSLog(@"%@", [dict description]);
+        NSString* status = [dict objectForKey:@"status"];
+        if([status isEqualToString:@"GOOD"]){
+            return YES;
+        }else{
+            return NO;
+        }
+    }
+};
+
 [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChanged:) name:kInternetStatusChangedNotification object:nil];
 NSString *remoteURL = @"https://b4.autodesk.com/api/system/v1/health.json?detailed=0";
 self.hostReachability = [[RLReachability alloc] initWithGetURL:remoteURL VerificationHandler:verifyBlock];
