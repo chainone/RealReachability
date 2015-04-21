@@ -108,7 +108,7 @@ static NSString * const hostStatusKeyPath = @"hostStatus";
             RLHostStatus retStatus = RLHostNotReachable;
             if(!error){
                 if([self->_acceptableStatusCodes containsIndex:((NSHTTPURLResponse*)response).statusCode]){
-                    if(_verifyBlock){
+                    if(self->_verifyBlock){
                         retStatus = self->_verifyBlock(data) ? RLHostReachable: RLHostNotReachable;
                     }else
                         retStatus = RLHostReachable;

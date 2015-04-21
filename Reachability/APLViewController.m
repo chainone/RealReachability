@@ -63,7 +63,7 @@
 @end
 
 
-BOOL (^verifyBlock)(NSData* data) = ^BOOL(NSData* data){
+static BOOL (^verifyBlock)(NSData* data) = ^BOOL(NSData* data){
     NSError* error;
     NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:(NSJSONReadingMutableContainers) error:&error];
     if(error)
@@ -89,10 +89,9 @@ BOOL (^verifyBlock)(NSData* data) = ^BOOL(NSData* data){
     [super viewDidLoad];
 
     NSString *remoteURL = @"http://www.baidu.com";
-    NSString *remoteURLFormatString = NSLocalizedString(@"Remote URL: %@", @"Remote host label format string");
-    self.remoteHostLabel.text = [NSString stringWithFormat:remoteURLFormatString, remoteURL];
+    self.remoteHostLabel.text = [NSString stringWithFormat:@"Host:%@", remoteURL];
 	self.hostReachability = [[RLReachability alloc] initWithGetURL:remoteURL verificationHandler:nil];
-    [self addObserver:self forKeyPath:@"hostReachability.hostStatus" options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld context:nil];
+    [self addObserver:self forKeyPath:@"hostReachability.hostStatus" options:(NSKeyValueObservingOptions)(NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld) context:nil];
     
     [self updateInterfaceWithReachability];
 }
@@ -110,7 +109,7 @@ BOOL (^verifyBlock)(NSData* data) = ^BOOL(NSData* data){
 
 - (void)updateInterfaceWithReachability
 {
-    RLHostReachabilityInfo* info = [_hostReachability currentReachabilityStatus];
+    RLHostReachabilityInfo* info = [self.hostReachability currentReachabilityStatus];
     
     switch (info.hostStatus) {
         case RLHostNotReachable:
@@ -120,8 +119,7 @@ BOOL (^verifyBlock)(NSData* data) = ^BOOL(NSData* data){
             self.remoteHostImageView.image = [UIImage imageNamed:@"Pending.png"] ;
             break;
             
-        case RLHostReachable:
-        {
+        case RLHostReachable:{
             switch (info.interfaceType) {
                 case RLTypeWWAN:
                     self.remoteHostImageView.image = [UIImage imageNamed:@"WWAN5.png"];
@@ -129,12 +127,10 @@ BOOL (^verifyBlock)(NSData* data) = ^BOOL(NSData* data){
                 case RLTypeWIFI:
                     self.remoteHostImageView.image = [UIImage imageNamed:@"Airport.png"];
                     break;
-                default:
+                case RLTypeNone:
                     break;
             }
         }
-            break;
-        default:
             break;
     }
     
