@@ -9,39 +9,37 @@
 #import <Foundation/Foundation.h>
 #include "Reachability.h"
 
-extern NSString *kInternetStatusChangedNotification;
+typedef NS_ENUM(NSUInteger, RLHostStatus) {
+    RLHostNotReachable = 0,
+    RLHostReachabilityPending = 1,
+    RLHostReachable = 2
+};
 
-typedef NS_ENUM(NSUInteger, RLInternetStatus) {
-    RLInternetNotReachable = 0,
-    RLInternetReachabilityPending = 1,
-    RLInternetReachable = 2
+typedef NS_ENUM(NSUInteger, RLHostNotReachableReason) {
+    RLHostNotReachableReasonNone = 0,
+    RLHostNotReachableReasonInterfaceNotConnected = 1,
+    RLHostNotReachableReasonInterfaceConnectedHostNotReachable = 2
 };
 
 typedef NS_ENUM(NSUInteger, RLInterfaceType) {
     RLTypeNone = 0,
     RLTypeWIFI = 1, //WIFI
-    RLTypeWWAN = 2  //3G
+    RLTypeWWAN = 2  //Celluar
 };
 
-
-@interface RLInternetReachabilityInfo : NSObject
-@property (nonatomic) RLInternetStatus internetStatus;
+@interface RLHostReachabilityInfo : NSObject
+@property (nonatomic) RLHostStatus hostStatus;
+@property (nonatomic) RLHostNotReachableReason hostStatusReason;
 @property (nonatomic) RLInterfaceType interfaceType;
+@property (nonatomic) NSString *celluarType;
 @end
 
 @interface RLReachability : NSObject
+@property (nonatomic, readonly) RLHostStatus hostStatus;
 
-@property (nonatomic, readonly) Reachability* applReachability;
-
--(instancetype)initWithGetURL:(NSString*)urlString VerificationHandler:(BOOL (^)(NSData *data))handler;
-
--(BOOL)isInterfaceConnected;
-
--(BOOL)isInternetConnectedSync;
-
--(NetworkStatus)currentInterfaceStatus;
-
--(RLInternetReachabilityInfo*)currentInternetStatus;
-
+- (instancetype)initWithGetURL:(NSString*)urlString verificationHandler:(BOOL (^)(NSData *data))handler;
+- (RLHostReachabilityInfo*)currentReachabilityStatus;
++ (NSString*)hostReachabilityInfoString:(RLHostReachabilityInfo*)info;
++ (NSString*)hostStatusString:(RLHostStatus)hostStatus;
 
 @end

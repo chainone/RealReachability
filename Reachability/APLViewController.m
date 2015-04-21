@@ -86,74 +86,65 @@ BOOL (^verifyBlock)(NSData* data) = ^BOOL(NSData* data){
 
 - (void)viewDidLoad
 {
-    self.summaryLabel.hidden = YES;
+    [super viewDidLoad];
 
-    /*
-     Observe the kNetworkReachabilityChangedNotification. When that notification is posted, the method reachabilityChanged will be called.
-     */
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChanged:) name:kInternetStatusChangedNotification object:nil];
-
-    NSString *remoteURL = @"https://b4.autodesk.com/api/system/v1/health.json?detailed=0";
+    NSString *remoteURL = @"http://www.baidu.com";
     NSString *remoteURLFormatString = NSLocalizedString(@"Remote URL: %@", @"Remote host label format string");
     self.remoteHostLabel.text = [NSString stringWithFormat:remoteURLFormatString, remoteURL];
-	self.hostReachability = [[RLReachability alloc] initWithGetURL:remoteURL VerificationHandler:verifyBlock];
+	self.hostReachability = [[RLReachability alloc] initWithGetURL:remoteURL verificationHandler:nil];
+    [self addObserver:self forKeyPath:@"hostReachability.hostStatus" options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld context:nil];
+    
     [self updateInterfaceWithReachability];
 }
 
 
-/*!
- * Called by Reachability whenever status changes.
- */
-- (void) reachabilityChanged:(NSNotification *)note
+- (void)observeValueForKeyPath:(NSString *)keyPath
+                      ofObject:(id)object
+                        change:(NSDictionary *)change
+                       context:(void *)context
 {
-	RLReachability* curReach = [note object];
-	NSParameterAssert([curReach isKindOfClass:[RLReachability class]] && _hostReachability == curReach);
-	[self updateInterfaceWithReachability];
+    if ([keyPath isEqualToString:@"hostReachability.hostStatus"]) {
+        [self updateInterfaceWithReachability];
+    }
 }
-
 
 - (void)updateInterfaceWithReachability
 {
-    NSString* statusString;
-    RLInternetReachabilityInfo* info = [_hostReachability currentInternetStatus];
-    switch (info.internetStatus) {
-        case RLInternetNotReachable:
-            statusString = NSLocalizedString(@"Access Not Available", @"Text field text for access is not available");
+    RLHostReachabilityInfo* info = [_hostReachability currentReachabilityStatus];
+    
+    switch (info.hostStatus) {
+        case RLHostNotReachable:
             self.remoteHostImageView.image = [UIImage imageNamed:@"stop-32.png"] ;
             break;
-        case RLInternetReachabilityPending:
-            statusString = NSLocalizedString(@"Checking Internet status", @"Text field text for checking status");
-            self.remoteHostImageView.image = [UIImage imageNamed:@"stop-32.png"] ;
+        case RLHostReachabilityPending:
+            self.remoteHostImageView.image = [UIImage imageNamed:@"Pending.png"] ;
             break;
             
-        case RLInternetReachable:
+        case RLHostReachable:
         {
             switch (info.interfaceType) {
-                case RLTypeWIFI:
-                    statusString = NSLocalizedString(@"Reachable WWAN", @"");
+                case RLTypeWWAN:
                     self.remoteHostImageView.image = [UIImage imageNamed:@"WWAN5.png"];
                     break;
-                case RLTypeWWAN:
-                    statusString= NSLocalizedString(@"Reachable WiFi", @"");
+                case RLTypeWIFI:
                     self.remoteHostImageView.image = [UIImage imageNamed:@"Airport.png"];
                     break;
                 default:
                     break;
             }
         }
-            
             break;
-            
         default:
             break;
     }
-    _remoteHostStatusField.text = statusString;
     
+    self.remoteHostStatusField.text = [RLReachability hostStatusString:info.hostStatus];
+    [self.summaryLabel setTranslatesAutoresizingMaskIntoConstraints:NO];
+    self.summaryLabel.text = [RLReachability hostReachabilityInfoString:info];
 }
 
-- (void)dealloc
-{
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:kInternetStatusChangedNotification object:nil];
+- (void)dealloc{
+    [self removeObserver:self forKeyPath:@"hostReachability.hostStatus"];
 }
 
 

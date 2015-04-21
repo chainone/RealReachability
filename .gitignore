@@ -1,26 +1,33 @@
-# Xcode
-#
+Pods/
+.gitconfig
+.DS_Store
+*.swp
+profile
+*.xccheckout
+*.war
+*~.nib
+DerivedData/
 build/
 *.pbxuser
-!default.pbxuser
 *.mode1v3
-!default.mode1v3
 *.mode2v3
-!default.mode2v3
 *.perspectivev3
+!default.pbxuser
+!default.mode1v3
+!default.mode2v3
 !default.perspectivev3
 xcuserdata
-*.xccheckout
 *.moved-aside
-DerivedData
-*.hmap
-*.ipa
-*.xcuserstate
-.DS_Store
-# CocoaPods
-#
-# We recommend against adding the Pods directory to your .gitignore. However
-# you should judge for yourself, the pros and cons are mentioned at:
-# http://guides.cocoapods.org/using/using-cocoapods.html#should-i-ignore-the-pods-directory-in-source-control
-#
-# Pods/
+*.ut
+*.xctlog
+weekly_*_report.png
+appium.txt
+*.report
+*_ut.png
+node_modules/
+Peregrine/Utilities/Playgrounds/Peregrine.playground/section-1.swift
+Peregrine/Utilities/Playgrounds/Peregrine.playground/timeline.xctimeline
+Peregrine/.idea
+CIScript/iosautott/features/.idea/
+CIScript/iosautott/features/screenshot/
+CIScript/iosautott/features/support/server_info*

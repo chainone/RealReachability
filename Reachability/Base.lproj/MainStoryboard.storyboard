@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5053" systemVersion="13E28" targetRuntime="iOS.CocoaTouch" variant="6xAndEarlier" propertyAccessControl="none" useAutolayout="YES" initialViewController="1wT-Qf-0XQ">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7531" systemVersion="14D131" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="1wT-Qf-0XQ">
     <dependencies>
-        <deployment defaultVersion="1536" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
+        <deployment version="1792" identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7520"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
-        <!--View Controller - Reachability-->
+        <!--Reachability-->
         <scene sceneID="5">
             <objects>
                 <viewController id="2" customClass="APLViewController" sceneMemberID="viewController">
@@ -14,47 +15,48 @@
                         <viewControllerLayoutGuide type="bottom" id="vgV-Vx-ssh"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="3">
-                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" minimumFontSize="14" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="280" translatesAutoresizingMaskIntoConstraints="NO" id="bby-T7-Piy">
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" misplaced="YES" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" minimumFontSize="14" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="280" translatesAutoresizingMaskIntoConstraints="NO" id="bby-T7-Piy">
                                 <rect key="frame" x="20" y="93" width="280" height="62"/>
                                 <string key="text">Cellular data network is available.
 Internet traffic will be routed through it.</string>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
-                                <color key="textColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="textColor" red="0.27197679424829502" green="0.46700499635911463" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <imageView opaque="NO" clearsContextBeforeDrawing="NO" userInteractionEnabled="NO" contentMode="center" translatesAutoresizingMaskIntoConstraints="NO" id="thm-ip-gCR">
-                                <rect key="frame" x="20" y="36" width="32" height="31"/>
+                                <rect key="frame" x="20" y="100" width="32" height="31"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="31" id="B5V-tv-b4L"/>
                                     <constraint firstAttribute="width" constant="32" id="jZr-1b-d3M"/>
                                 </constraints>
                             </imageView>
                             <textField opaque="NO" clearsContextBeforeDrawing="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" clearsOnBeginEditing="YES" minimumFontSize="12" translatesAutoresizingMaskIntoConstraints="NO" id="TYc-jw-Edc">
-                                <rect key="frame" x="60" y="36" width="240" height="31"/>
+                                <rect key="frame" x="60" y="100" width="240" height="31"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <textField opaque="NO" clearsContextBeforeDrawing="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Remote Host:" clearsOnBeginEditing="YES" minimumFontSize="29" translatesAutoresizingMaskIntoConstraints="NO" id="TIF-40-xoz">
-                                <rect key="frame" x="20" y="8" width="105" height="20"/>
+                                <rect key="frame" x="20" y="72" width="105" height="20"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstAttribute="trailing" secondItem="bby-T7-Piy" secondAttribute="trailing" constant="20" symbolic="YES" id="1U2-Fr-TGN"/>
                             <constraint firstItem="thm-ip-gCR" firstAttribute="top" secondItem="TIF-40-xoz" secondAttribute="bottom" constant="8" symbolic="YES" id="3nX-xO-tTf"/>
                             <constraint firstAttribute="trailing" secondItem="TYc-jw-Edc" secondAttribute="trailing" constant="20" id="3v6-Hd-kjc"/>
                             <constraint firstItem="TIF-40-xoz" firstAttribute="leading" secondItem="3" secondAttribute="leading" constant="20" symbolic="YES" id="578-25-hIn"/>
-                            <constraint firstItem="TIF-40-xoz" firstAttribute="top" secondItem="JU0-nd-qau" secondAttribute="bottom" constant="20" symbolic="YES" id="BPd-2T-uO8"/>
-                            <constraint firstItem="bby-T7-Piy" firstAttribute="leading" secondItem="3" secondAttribute="leading" constant="20" symbolic="YES" id="JZb-3R-sIV"/>
+                            <constraint firstItem="TIF-40-xoz" firstAttribute="top" secondItem="JU0-nd-qau" secondAttribute="bottom" constant="8" symbolic="YES" id="BPd-2T-uO8"/>
+                            <constraint firstItem="bby-T7-Piy" firstAttribute="leading" secondItem="3" secondAttribute="leadingMargin" constant="4" id="CiI-fA-kNH"/>
+                            <constraint firstItem="bby-T7-Piy" firstAttribute="top" secondItem="TYc-jw-Edc" secondAttribute="bottom" constant="20" id="OU7-3w-DnX"/>
                             <constraint firstItem="TYc-jw-Edc" firstAttribute="leading" secondItem="thm-ip-gCR" secondAttribute="trailing" constant="8" symbolic="YES" id="Rea-bl-U32"/>
                             <constraint firstItem="TIF-40-xoz" firstAttribute="leading" secondItem="thm-ip-gCR" secondAttribute="leading" id="S5a-Xw-nYY"/>
                             <constraint firstItem="thm-ip-gCR" firstAttribute="leading" secondItem="3" secondAttribute="leading" constant="20" symbolic="YES" id="fgi-kH-KoI"/>
                             <constraint firstItem="TYc-jw-Edc" firstAttribute="top" secondItem="TIF-40-xoz" secondAttribute="bottom" constant="8" symbolic="YES" id="igi-sf-7pP"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="bby-T7-Piy" secondAttribute="trailing" constant="4" id="pzq-eu-zo4"/>
                             <constraint firstItem="TYc-jw-Edc" firstAttribute="bottom" secondItem="thm-ip-gCR" secondAttribute="bottom" id="wc9-ru-QIk"/>
                         </constraints>
                     </view>
