@@ -56,16 +56,20 @@ static NSString * const hostStatusKeyPath = @"hostStatus";
 
 - (void)_setupBindings{
     
+    //
     //1. Create Signals that would trigger host reachability change
     //   following events could potentially impact the reachability status:
     //
     //  a. reachability change
     //
     @weakify(self)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wundeclared-selector"
     RACSignal *reachabilityChangeSig = [[[self.applReachability rac_signalForSelector:@selector(reachabilityChanged:)] deliverOnMainThread] doNext:^(id __unused _) {
         @strongify(self)
         NSLog(@"%@: Interface reachability status changed to %@ ",[NSDate date], @(self.applReachability.currentReachabilityStatus != NotReachable));
     }];
+#pragma clang diagnostic pop
     
     //
     //  b. celluar change

@@ -37,7 +37,6 @@
 		284A9D3D17BACFCC00206D4F /* APLViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = APLViewController.m; sourceTree = "<group>"; };
 		284A9D3F17BACFCC00206D4F /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		284A9D6017BAD0EC00206D4F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainStoryboard.storyboard; sourceTree = "<group>"; };
-		289CAD4317BAD28D00F2018C /* ReadMe.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = ReadMe.txt; sourceTree = "<group>"; };
 		289CAD4617BAD3F200F2018C /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		46CF353414F3A7BF4D737B1B /* Pods-Reachability.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Reachability.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Reachability/Pods-Reachability.debug.xcconfig"; sourceTree = "<group>"; };
 		4918CCAA1AE5F9FC006D4BBA /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
@@ -75,7 +74,6 @@
 		284A9D1817BACFCC00206D4F = {
 			isa = PBXGroup;
 			children = (
-				289CAD4317BAD28D00F2018C /* ReadMe.txt */,
 				284A9D2A17BACFCC00206D4F /* Reachability */,
 				284A9D2317BACFCC00206D4F /* Frameworks */,
 				284A9D2217BACFCC00206D4F /* Products */,
