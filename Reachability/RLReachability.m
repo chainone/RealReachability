@@ -97,27 +97,30 @@ static NSString * const hostStatusKeyPath = @"hostStatus";
     NSCParameterAssert(self->_url);
     
     if ([self.applReachability currentReachabilityStatus] == NotReachable) {
-        [self _setHostStatusOnMainThread:RLHostNotReachable];
+        self.hostStatus = RLHostNotReachable;
     }else{
-        [self _setHostStatusOnMainThread:RLHostReachabilityPending];
-        NSLog(@"Start to send the request to check the internet status, pending...");
         
-        @weakify(self)
-        [[[NSURLSession sharedSession] dataTaskWithRequest:[NSURLRequest requestWithURL:_url] completionHandler:^(NSData *data, NSURLResponse *response, NSError *error){
-            @strongify(self)
-            RLHostStatus retStatus = RLHostNotReachable;
-            if(!error){
-                if([self->_acceptableStatusCodes containsIndex:((NSHTTPURLResponse*)response).statusCode]){
-                    if(self->_verifyBlock){
-                        retStatus = self->_verifyBlock(data) ? RLHostReachable: RLHostNotReachable;
-                    }else
-                        retStatus = RLHostReachable;
-                }
-            }
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            self.hostStatus = RLHostReachabilityPending;
+            NSLog(@"Start to send the request to check the internet status, pending...");
             
-            NSLog(@"Check finished, host reachability:%@", @(retStatus));
-            [self _setHostStatusOnMainThread:retStatus];
-        }] resume];
+            @weakify(self)
+            [[[NSURLSession sharedSession] dataTaskWithRequest:[NSURLRequest requestWithURL:self->_url] completionHandler:^(NSData *data, NSURLResponse *response, NSError *error){
+                @strongify(self)
+                RLHostStatus retStatus = RLHostNotReachable;
+                if(!error){
+                    if([self->_acceptableStatusCodes containsIndex:((NSHTTPURLResponse*)response).statusCode]){
+                        if(self->_verifyBlock){
+                            retStatus = self->_verifyBlock(data) ? RLHostReachable: RLHostNotReachable;
+                        }else
+                            retStatus = RLHostReachable;
+                    }
+                }
+                
+                NSLog(@"Check finished, host reachability:%@", @(retStatus));
+                [self _setHostStatusOnMainThread:retStatus];
+            }] resume];
+        });
     }
 }
 
